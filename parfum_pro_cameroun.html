@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>ParfumPro Cameroun 🧴</title>
+<style>
+:root{
+  --bg:#0f0520;--card:#1a0a2e;--surf:#251040;
+  --gold:#d4af37;--gold2:#f0d060;
+  --txt:#f5f0ff;--muted:#a090c0;--border:rgba(212,175,55,.2);
+  --green:#4ade80;--orange:#fb923c;--red:#f87171;--blue:#60a5fa;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;
+  min-height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;
+  font-size:15px;}
+input,select,textarea,button{font-family:inherit;font-size:15px}
+input,select,textarea{background:var(--surf);border:1px solid var(--border);
+  border-radius:10px;padding:11px 13px;color:var(--txt);width:100%;outline:none;
+  transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(212,175,55,.15)}
+label.lbl{font-size:12px;font-weight:600;color:var(--muted);display:block;margin-bottom:5px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+.btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:12px;
+  padding:12px 18px;font-weight:600;cursor:pointer;transition:transform .15s,opacity .15s}
+.btn:active{transform:scale(.97)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0f0520}
+.btn-ghost{background:rgba(212,175,55,.1);color:var(--gold);border:1px solid rgba(212,175,55,.3)}
+.btn-red{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3);
+  padding:7px 12px;border-radius:9px}
+.btn-blue{background:rgba(96,165,250,.12);color:var(--blue);border:1px solid rgba(96,165,250,.25);
+  padding:7px 12px;border-radius:9px}
+.btn-sm{padding:7px 13px;font-size:13px;border-radius:9px}
+.badge{border-radius:20px;padding:2px 10px;font-size:12px;font-weight:700}
+.bg{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.bo{background:rgba(251,146,60,.12);color:var(--orange);border:1px solid rgba(251,146,60,.3)}
+.br{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+/* header */
+#header{background:var(--card);border-bottom:1px solid var(--border);
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:40}
+#header h1{font-size:20px;font-weight:700;color:var(--gold)}
+#header p{font-size:11px;color:var(--muted)}
+/* main */
+#main{flex:1;overflow-y:auto;padding:12px;padding-bottom:80px}
+/* nav */
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
+  background:var(--card);border-top:1px solid var(--border);
+  display:flex;z-index:40;padding:6px 8px}
+.ntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 2px;cursor:pointer;border-radius:10px;font-size:10px;font-weight:600;
+  color:var(--muted);border:none;background:transparent;position:relative;transition:color .2s}
+.ntab.on{color:var(--gold)}
+.ntab svg{width:22px;height:22px;stroke-width:1.8;fill:none;stroke:currentColor;
+  stroke-linecap:round;stroke-linejoin:round}
+.ntab.on svg{stroke-width:2.5}
+.ntab-bar{position:absolute;top:0;left:10%;right:10%;height:2px;border-radius:2px;
+  background:var(--gold);display:none}
+.ntab.on .ntab-bar{display:block}
+#nbadge{position:absolute;top:4px;right:6px;background:#ef4444;color:#fff;
+  font-size:9px;font-weight:700;border-radius:99px;min-width:15px;height:15px;
+  padding:0 3px;display:flex;align-items:center;justify-content:center}
+/* sections */
+.sec{display:none;animation:fadeUp .25s ease}
+.sec.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* tabs inside section */
+.tabs{display:flex;gap:8px;margin-bottom:12px}
+.tab-btn{flex:1;padding:10px;border-radius:12px;font-weight:600;font-size:13px;
+  border:none;cursor:pointer;transition:all .2s}
+.tab-btn.on{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#0f0520}
+.tab-btn.off{background:rgba(212,175,55,.1);color:var(--gold);border:1px solid rgba(212,175,55,.3)}
+/* stat grid */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:12px;display:flex;align-items:center;gap:10px}
+.sicon{border-radius:10px;padding:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sicon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.sval{font-weight:700;font-size:15px;line-height:1.2}
+.slbl{font-size:11px;color:var(--muted)}
+/* chart */
+#chart-wrap{height:130px;display:flex;align-items:flex-end;gap:5px;padding:0 4px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar-col span{font-size:9px;color:var(--muted)}
+.bar{width:100%;border-radius:4px 4px 0 0;background:var(--gold);
+  transition:height .4s ease;min-height:2px}
+/* product card */
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;
+  padding:12px;margin-bottom:10px}
+.pthumb{width:56px;height:56px;border-radius:12px;object-fit:cover;
+  background:var(--surf);display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0}
+.pthumb img{width:100%;height:100%;border-radius:12px;object-fit:cover}
+/* sale card */
+.vcard{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:11px;margin-bottom:8px}
+/* alert banner */
+.alert-banner{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.35);
+  border-radius:12px;padding:10px 13px;margin-bottom:10px}
+/* modal */
+#modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;
+  align-items:flex-end;justify-content:center}
+#modal-bg.show{display:flex}
+#modal{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:480px;
+  max-height:92vh;overflow-y:auto;padding:20px 16px 32px}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;position:sticky;top:0;background:var(--card);
+  padding-bottom:10px;border-bottom:1px solid var(--border);z-index:5}
+.modal-hd h3{font-size:18px;font-weight:700;color:var(--gold)}
+.close-btn{background:none;border:none;cursor:pointer;color:var(--muted);
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:8px}
+.close-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round}
+/* form rows */
+.frow{margin-bottom:12px}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.genre-btns{display:flex;gap:8px}
+.genre-btn{flex:1;padding:9px;border-radius:10px;font-weight:600;font-size:13px;
+  cursor:pointer;border:1px solid var(--border);background:var(--surf);color:var(--muted);
+  transition:all .2s}
+.genre-btn.on{background:var(--gold);color:#0f0520;border-color:var(--gold)}
+/* search bar */
+.searchbar{display:flex;align-items:center;gap:8px;background:var(--surf);
+  border:1px solid var(--border);border-radius:10px;padding:9px 13px;margin-bottom:10px}
+.searchbar input{background:transparent;border:none;flex:1;color:var(--txt);
+  padding:0;box-shadow:none;outline:none;font-size:14px}
+.searchbar svg{width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2;
+  stroke-linecap:round;flex-shrink:0}
+/* dropdown */
+.dd-wrap{position:relative}
+.dd-list{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:50;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  max-height:200px;overflow-y:auto;display:none}
+.dd-list.show{display:block}
+.dd-item{padding:11px 13px;cursor:pointer;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.dd-item:last-child{border-bottom:none}
+.dd-item:hover{background:rgba(255,255,255,.04)}
+/* success toast */
+#toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);
+  background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.4);
+  color:var(--green);padding:10px 20px;border-radius:12px;font-weight:600;
+  font-size:14px;z-index:200;display:none;white-space:nowrap}
+/* chips filter */
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+.chip{padding:5px 13px;border-radius:20px;font-size:12px;font-weight:600;
+  white-space:nowrap;cursor:pointer;flex-shrink:0;border:1px solid var(--border);
+  background:var(--surf);color:var(--muted);transition:all .2s}
+.chip.on{background:var(--gold);color:#0f0520;border-color:var(--gold)}
+/* totals band */
+.totals{background:rgba(212,175,55,.07);border:1px solid rgba(212,175,55,.3);
+  border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr 1fr 1fr;
+  text-align:center;gap:8px;margin-bottom:10px}
+.totals .tv{font-weight:700;font-size:14px}
+.totals .tl{font-size:11px;color:var(--muted)}
+/* divider */
+hr{border:none;border-top:1px solid var(--border);margin:10px 0}
+/* util */
+.flex{display:flex}.aic{align-items:center}.jb{justify-content:space-between}
+.gap2{gap:8px}.gap3{gap:12px}.mt1{margin-top:6px}.mt2{margin-top:12px}
+.w100{width:100%}.bold{font-weight:700}.sm{font-size:12px}.muted{color:var(--muted)}
+.trunc{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gold{color:var(--gold)}.grn{color:var(--green)}.red{color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div>
+    <h1>ParfumPro</h1>
+    <p>Gestion des ventes</p>
+  </div>
+  <button class="btn btn-red btn-sm" id="hdr-alert" onclick="goStock()" style="display:none"></button>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="sec on" id="sec-dash">
+    <div class="flex aic jb" style="margin-bottom:12px">
+      <div>
+        <div style="font-size:20px;font-weight:700">Aujourd'hui</div>
+        <div class="sm muted" id="date-lbl"></div>
+      </div>
+      <button class="btn btn-gold btn-sm" onclick="showTab('ventes')">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Vendre
+      </button>
+    </div>
+    <div class="sgrid" id="stats-grid"></div>
+    <div id="dash-alert"></div>
+    <div class="card" style="margin-bottom:12px">
+      <div class="flex aic jb" style="margin-bottom:12px">
+        <span style="font-weight:600;font-size:14px">CA — 7 derniers jours</span>
+      </div>
+      <div id="chart-wrap"></div>
+    </div>
+    <div class="card">
+      <div class="flex aic jb" style="margin-bottom:10px">
+        <span style="font-weight:600;font-size:14px">Dernières ventes</span>
+        <button class="sm gold" style="background:none;border:none;cursor:pointer"
+          onclick="showTab('rapports')">Voir tout →</button>
+      </div>
+      <div id="dash-ventes"></div>
+    </div>
+  </div>
+
+  <!-- ===== VENTES ===== -->
+  <div class="sec" id="sec-ventes">
+    <div class="tabs">
+      <button class="tab-btn on" id="tbv1" onclick="switchVTab('form')">Nouvelle vente</button>
+      <button class="tab-btn off" id="tbv2" onclick="switchVTab('hist')">Ventes du jour (<span id="vcnt">0</span>)</button>
+    </div>
+    <!-- Formulaire vente -->
+    <div id="vtab-form">
+      <div class="card" style="margin-bottom:10px">
+        <label class="lbl">Parfum *</label>
+        <div id="sel-wrap">
+          <div class="dd-wrap">
+            <div class="searchbar">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="prod-search" placeholder="Rechercher un parfum..." oninput="filterProdSearch()" onfocus="showDD()" autocomplete="off"/>
+              <button style="background:none;border:none;cursor:pointer;padding:0" onclick="clearSearch()" id="clear-search" style="display:none">
+                <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+            <div class="dd-list" id="dd-prod"></div>
+          </div>
+          <div id="sel-info" style="display:none;background:var(--surf);border:1px solid var(--gold);border-radius:12px;padding:11px;margin-top:6px">
+            <div class="flex aic jb">
+              <div>
+                <div class="bold" id="si-nom"></div>
+                <div class="sm muted" id="si-sub"></div>
+              </div>
+              <button onclick="clearSel()" style="background:none;border:none;cursor:pointer;color:var(--muted)">
+                <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="vform-fields" style="display:none">
+        <div class="fgrid2">
+          <div class="frow" style="margin:0">
+            <label class="lbl">Quantité *</label>
+            <input type="number" id="v-qty" min="1" value="1" oninput="calcTotal()"/>
+          </div>
+          <div class="frow" style="margin:0">
+            <label class="lbl">Prix vente (FCFA) *</label>
+            <input type="number" id="v-prix" oninput="calcTotal()"/>
+          </div>
+        </div>
+        <div class="frow">
+          <label class="lbl">Moyen de paiement *</label>
+          <select id="v-paie">
+            <option>MTN Mobile Money</option>
+            <option>Orange Money</option>
+            <option>Espèces</option>
+            <option>Autres</option>
+          </select>
+        </div>
+        <div class="fgrid2">
+          <div class="frow" style="margin:0">
+            <label class="lbl">Nom du client</label>
+            <input type="text" id="v-client" placeholder="Optionnel"/>
+          </div>
+          <div class="frow" style="margin:0">
+            <label class="lbl">Note</label>
+            <input type="text" id="v-note" placeholder="Optionnel"/>
+          </div>
+        </div>
+        <div id="v-total" class="card" style="border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.05);margin-bottom:12px;display:none">
+          <div class="flex aic jb">
+            <span class="muted sm">Total à encaisser</span>
+            <span class="bold gold" id="v-total-val" style="font-size:20px"></span>
+          </div>
+          <div class="flex aic jb mt1">
+            <span class="muted sm">Bénéfice estimé</span>
+            <span class="grn bold sm" id="v-ben-val"></span>
+          </div>
+        </div>
+        <div id="v-err" style="display:none" class="alert-banner sm"></div>
+        <button class="btn btn-gold w100" style="justify-content:center;font-size:16px;padding:15px" onclick="submitVente()">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>
+          Enregistrer la vente
+        </button>
+      </div>
+    </div>
+    <!-- Historique du jour -->
+    <div id="vtab-hist" style="display:none">
+      <div id="vhist-list"></div>
+    </div>
+  </div>
+
+  <!-- ===== STOCK ===== -->
+  <div class="sec" id="sec-stock">
+    <div class="flex aic jb" style="margin-bottom:10px">
+      <h2 style="font-weight:700;font-size:20px">Catalogue</h2>
+      <button class="btn btn-gold btn-sm" onclick="openAddProd()">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Ajouter
+      </button>
+    </div>
+    <div class="searchbar">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="stock-search" placeholder="Rechercher..." oninput="renderStock()"/>
+    </div>
+    <div class="chips" id="genre-chips">
+      <div class="chip on" onclick="setGenreFilter('Tous',this)">Tous</div>
+      <div class="chip" onclick="setGenreFilter('Homme',this)">Homme</div>
+      <div class="chip" onclick="setGenreFilter('Femme',this)">Femme</div>
+      <div class="chip" onclick="setGenreFilter('Mixte',this)">Mixte</div>
+    </div>
+    <div class="sm muted" id="stock-count" style="margin-bottom:8px"></div>
+    <div id="stock-list"></div>
+  </div>
+
+  <!-- ===== RAPPORTS ===== -->
+  <div class="sec" id="sec-rapports">
+    <div class="tabs">
+      <button class="tab-btn on" id="tbr1" onclick="switchRTab('hist')">Historique</button>
+      <button class="tab-btn off" id="tbr2" onclick="switchRTab('mois')">Résumé mensuel</button>
+    </div>
+    <!-- Historique global -->
+    <div id="rtab-hist">
+      <div class="card" style="margin-bottom:10px">
+        <div class="flex aic gap2" style="margin-bottom:10px">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;flex-shrink:0"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          <span style="font-weight:600;font-size:14px">Filtres</span>
+        </div>
+        <div class="frow">
+          <input id="r-search" placeholder="Filtrer par produit..." oninput="renderHist()"/>
+        </div>
+        <div class="fgrid2">
+          <div><label class="lbl">Date début</label><input type="date" id="r-deb" onchange="renderHist()"/></div>
+          <div><label class="lbl">Date fin</label><input type="date" id="r-fin" onchange="renderHist()"/></div>
+        </div>
+        <div class="chips" style="margin-bottom:0" id="paie-chips">
+          <div class="chip on" onclick="setPayFilter('Tous',this)">Tous</div>
+          <div class="chip" onclick="setPayFilter('MTN Mobile Money',this)">MTN</div>
+          <div class="chip" onclick="setPayFilter('Orange Money',this)">Orange</div>
+          <div class="chip" onclick="setPayFilter('Espèces',this)">Espèces</div>
+          <div class="chip" onclick="setPayFilter('Autres',this)">Autres</div>
+        </div>
+      </div>
+      <div class="totals" id="hist-totals"></div>
+      <div class="flex gap2" style="margin-bottom:10px">
+        <button class="btn btn-ghost btn-sm flex-1" style="justify-content:center" onclick="exportCSV()">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+        <button class="btn btn-ghost btn-sm flex-1" style="justify-content:center" onclick="printDay()">
+          <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Imprimer
+        </button>
+      </div>
+      <div id="hist-list"></div>
+    </div>
+    <!-- Résumé mensuel -->
+    <div id="rtab-mois" style="display:none">
+      <div class="card flex aic gap3" style="margin-bottom:10px">
+        <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <select id="r-mois" onchange="renderMois()" style="flex:1"></select>
+        <select id="r-annee" onchange="renderMois()" style="width:90px"></select>
+      </div>
+      <div id="mois-stats"></div>
+      <div id="mois-paie" class="card" style="margin-bottom:10px;display:none">
+        <div style="font-weight:600;font-size:14px;margin-bottom:10px">Répartition paiements</div>
+        <div id="mois-paie-list"></div>
+      </div>
+      <button class="btn btn-gold w100" style="justify-content:center" onclick="exportMois()">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exporter le mois en CSV
+      </button>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- NAV -->
+<nav id="nav">
+  <button class="ntab on" id="nt-dash" onclick="showTab('dash')">
+    <div class="ntab-bar"></div>
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+    Tableau de bord
+  </button>
+  <button class="ntab" id="nt-ventes" onclick="showTab('ventes')">
+    <div class="ntab-bar"></div>
+    <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    Vente
+  </button>
+  <button class="ntab" id="nt-stock" onclick="showTab('stock')" style="position:relative">
+    <div class="ntab-bar"></div>
+    <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    Stock
+    <span id="nbadge" style="display:none"></span>
+  </button>
+  <button class="ntab" id="nt-rapports" onclick="showTab('rapports')">
+    <div class="ntab-bar"></div>
+    <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Rapports
+  </button>
+</nav>
+
+<!-- MODAL -->
+<div id="modal-bg" onclick="closeModalBg(event)">
+  <div id="modal">
+    <div class="modal-hd">
+      <h3 id="modal-title">Ajouter un parfum</h3>
+      <button class="close-btn" onclick="closeModal()">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DONNÉES & PERSISTANCE
+// ─────────────────────────────────────────────
+const KEYS = { P:'pfp_produits', V:'pfp_ventes', R:'pfp_reappros', INIT:'pfp_init3' }
+
+const load = k => { try{ return JSON.parse(localStorage.getItem(k)||'[]') }catch{ return [] } }
+const save = (k,v) => localStorage.setItem(k, JSON.stringify(v))
+
+let produits = load(KEYS.P)
+let ventes   = load(KEYS.V)
+let reappros = load(KEYS.R)
+
+// ─────────────────────────────────────────────
+// FORMATAGE
+// ─────────────────────────────────────────────
+const fcfa = n => new Intl.NumberFormat('fr-FR').format(Math.round(n||0)) + ' FCFA'
+const fdate = iso => new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'})
+const fdatetime = iso => new Date(iso).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})
+const today = () => new Date().toISOString().split('T')[0]
+
+// ─────────────────────────────────────────────
+// DONNÉES EXEMPLE
+// ─────────────────────────────────────────────
+function initData(){
+  if(localStorage.getItem(KEYS.INIT)) return
+  produits = [
+    {id:'p1',nom:'Dior Sauvage',marque:'Dior',contenance:'100ml',genre:'Homme',prixAchat:18000,prixVente:28000,stock:5,stockAlerte:2,photo:null,notes:'Original Dubai, très demandé'},
+    {id:'p2',nom:'Chanel N°5',marque:'Chanel',contenance:'50ml',genre:'Femme',prixAchat:22000,prixVente:35000,stock:3,stockAlerte:2,photo:null,notes:'Best-seller dames'},
+    {id:'p3',nom:"La Nuit de l'Homme",marque:'YSL',contenance:'60ml',genre:'Homme',prixAchat:15000,prixVente:23000,stock:8,stockAlerte:3,photo:null,notes:'Bon rapport qualité/prix'},
+    {id:'p4',nom:'Good Girl',marque:'Carolina Herrera',contenance:'50ml',genre:'Femme',prixAchat:19000,prixVente:30000,stock:2,stockAlerte:2,photo:null,notes:'Stock faible – à commander'},
+    {id:'p5',nom:'Aventus',marque:'Creed',contenance:'50ml',genre:'Mixte',prixAchat:45000,prixVente:70000,stock:1,stockAlerte:1,photo:null,notes:'Haut de gamme – clientèle VIP'},
+  ]
+  const d1 = daysAgo(1), d2 = daysAgo(2)
+  ventes = [
+    {id:'v1',produitId:'p1',nomProduit:'Dior Sauvage',marque:'Dior',quantite:1,prixUnitaire:28000,total:28000,prixAchat:18000,benefice:10000,paiement:'MTN Mobile Money',client:'Jean-Paul',note:'',date:d1+'T10:30:00',annulee:false},
+    {id:'v2',produitId:'p2',nomProduit:'Chanel N°5',marque:'Chanel',quantite:1,prixUnitaire:35000,total:35000,prixAchat:22000,benefice:13000,paiement:'Orange Money',client:'Marie Céleste',note:'Cadeau anniversaire',date:d1+'T14:15:00',annulee:false},
+    {id:'v3',produitId:'p3',nomProduit:"La Nuit de l'Homme",marque:'YSL',quantite:2,prixUnitaire:23000,total:46000,prixAchat:15000,benefice:16000,paiement:'Espèces',client:'',note:'',date:d2+'T16:00:00',annulee:false},
+  ]
+  save(KEYS.P, produits); save(KEYS.V, ventes)
+  localStorage.setItem(KEYS.INIT, '1')
+}
+
+function daysAgo(n){
+  const d=new Date(); d.setDate(d.getDate()-n); return d.toISOString().split('T')[0]
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+const tabs = ['dash','ventes','stock','rapports']
+function showTab(t){
+  tabs.forEach(x=>{
+    document.getElementById('sec-'+x).classList.toggle('on', x===t)
+    document.getElementById('nt-'+x).classList.toggle('on', x===t)
+  })
+  if(t==='dash') renderDash()
+  if(t==='ventes') renderVHist()
+  if(t==='stock') renderStock()
+  if(t==='rapports') renderHist()
+}
+function goStock(){ showTab('stock') }
+
+// ─────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────
+function toast(msg){
+  const el=document.getElementById('toast')
+  el.textContent=msg; el.style.display='block'
+  clearTimeout(toast._t)
+  toast._t=setTimeout(()=>el.style.display='none', 2800)
+}
+
+// ─────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────
+function renderDash(){
+  document.getElementById('date-lbl').textContent =
+    new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})
+
+  const td = today()
+  const vj = ventes.filter(v=>!v.annulee && v.date.startsWith(td))
+  const ca = vj.reduce((s,v)=>s+v.total,0)
+  const ben = vj.reduce((s,v)=>s+v.benefice,0)
+  const topMap={}; vj.forEach(v=>topMap[v.nomProduit]=(topMap[v.nomProduit]||0)+v.quantite)
+  const top = Object.entries(topMap).sort((a,b)=>b[1]-a[1])[0]
+
+  const sg = document.getElementById('stats-grid')
+  sg.innerHTML = `
+    <div class="scard"><div class="sicon" style="background:rgba(212,175,55,.15);color:var(--gold)">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    </div><div><div class="slbl">CA du jour</div><div class="sval gold">${fcfa(ca)}</div></div></div>
+
+    <div class="scard"><div class="sicon" style="background:rgba(74,222,128,.15);color:var(--green)">
+      <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+    </div><div><div class="slbl">Bénéfice</div><div class="sval grn">${fcfa(ben)}</div></div></div>
+
+    <div class="scard"><div class="sicon" style="background:rgba(96,165,250,.15);color:var(--blue)">
+      <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    </div><div><div class="slbl">Nb ventes</div><div class="sval">${vj.length}</div></div></div>
+
+    <div class="scard"><div class="sicon" style="background:rgba(192,132,252,.15);color:#c084fc">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div><div><div class="slbl">Top produit</div><div class="sval trunc" style="max-width:110px">${top?top[0]:'—'}</div></div></div>
+  `
+
+  // Alertes
+  const alertes = produits.filter(p=>p.stock<=p.stockAlerte)
+  const da = document.getElementById('dash-alert')
+  if(alertes.length){
+    da.innerHTML = `<div class="alert-banner" style="cursor:pointer" onclick="goStock()">
+      <div class="flex aic gap2" style="margin-bottom:6px">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;fill:none;stroke:var(--red);stroke-width:2;stroke-linecap:round;flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="font-weight:700;color:var(--red);font-size:13px">Alertes stock (${alertes.length})</span>
+        <span style="margin-left:auto;font-size:12px;color:var(--red)">Voir →</span>
+      </div>
+      ${alertes.map(p=>`<div class="flex aic jb" style="margin-bottom:3px">
+        <span class="sm">${p.nom} <span class="muted">${p.marque}</span></span>
+        <span class="badge ${p.stock===0?'br':'bo'}">${p.stock===0?'Rupture':p.stock+' restant'+(p.stock>1?'s':'')}</span>
+      </div>`).join('')}
+    </div>`
+  } else { da.innerHTML='' }
+
+  // Badge header
+  const hb = document.getElementById('hdr-alert')
+  const nb = document.getElementById('nbadge')
+  if(alertes.length){
+    hb.style.display='flex'; hb.textContent='⚠ '+alertes.length+' alerte'+(alertes.length>1?'s':'')
+    nb.style.display='flex'; nb.textContent=alertes.length
+  } else { hb.style.display='none'; nb.style.display='none' }
+
+  // Chart 7 jours
+  const data7 = []
+  for(let i=6;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i)
+    const ds = d.toISOString().split('T')[0]
+    const lbl = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})
+    const ca = ventes.filter(v=>!v.annulee&&v.date.startsWith(ds)).reduce((s,v)=>s+v.total,0)
+    data7.push({lbl, ca})
+  }
+  const maxCA = Math.max(...data7.map(d=>d.ca), 1)
+  const cw = document.getElementById('chart-wrap')
+  cw.innerHTML = data7.map(d=>`
+    <div class="bar-col">
+      <div class="bar" style="height:${Math.max(4, Math.round(d.ca/maxCA*100))}px" title="${fcfa(d.ca)}"></div>
+      <span>${d.lbl}</span>
+    </div>`).join('')
+
+  // Dernières ventes
+  const dv = document.getElementById('dash-ventes')
+  const rec = ventes.filter(v=>!v.annulee).slice(0,3)
+  if(!rec.length){ dv.innerHTML='<p class="sm muted" style="text-align:center;padding:16px">Aucune vente</p>'; return }
+  dv.innerHTML = rec.map(v=>`
+    <div class="flex aic jb" style="padding:8px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div class="bold sm">${v.nomProduit}</div>
+        <div class="sm muted">Qté: ${v.quantite} · ${v.paiement}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="gold bold sm">${fcfa(v.total)}</div>
+        <div class="grn" style="font-size:11px">+${fcfa(v.benefice)}</div>
+      </div>
+    </div>`).join('')
+}
+
+// ─────────────────────────────────────────────
+// FORMULAIRE VENTE
+// ─────────────────────────────────────────────
+let selProd = null
+let payFilter = 'Tous', genreFilter = 'Tous'
+let vtabActif = 'form'
+
+function switchVTab(t){
+  vtabActif = t
+  document.getElementById('vtab-form').style.display = t==='form'?'block':'none'
+  document.getElementById('vtab-hist').style.display = t==='hist'?'block':'none'
+  document.getElementById('tbv1').className = 'tab-btn '+(t==='form'?'on':'off')
+  document.getElementById('tbv2').className = 'tab-btn '+(t==='hist'?'on':'off')
+  if(t==='hist') renderVHist()
+}
+
+function filterProdSearch(){
+  const q = document.getElementById('prod-search').value.toLowerCase()
+  document.getElementById('clear-search').style.display = q?'block':'none'
+  showDD()
+}
+
+function showDD(){
+  const q = document.getElementById('prod-search').value.toLowerCase()
+  const list = produits.filter(p=>p.stock>0&&(!q||p.nom.toLowerCase().includes(q)||p.marque.toLowerCase().includes(q)))
+  const dd = document.getElementById('dd-prod')
+  if(!list.length){ dd.innerHTML='<div class="dd-item sm muted">Aucun produit disponible</div>'; dd.classList.add('show'); return }
+  dd.innerHTML = list.map(p=>`
+    <div class="dd-item" onclick="selectProd('${p.id}')">
+      <div>
+        <div class="bold sm">${p.nom}</div>
+        <div class="sm muted">${p.marque} · ${p.contenance}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="gold bold sm">${fcfa(p.prixVente)}</div>
+        <div class="sm" style="color:${p.stock===0?'var(--red)':p.stock<=p.stockAlerte?'var(--orange)':'var(--green)'}">Stock: ${p.stock}</div>
+      </div>
+    </div>`).join('')
+  dd.classList.add('show')
+}
+
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#sel-wrap')) document.getElementById('dd-prod').classList.remove('show')
+})
+
+function selectProd(id){
+  selProd = produits.find(p=>p.id===id)
+  document.getElementById('dd-prod').classList.remove('show')
+  document.getElementById('prod-search').value=''
+  document.getElementById('sel-info').style.display='block'
+  document.getElementById('si-nom').textContent = selProd.nom
+  document.getElementById('si-sub').textContent = `${selProd.marque} · ${selProd.contenance} · Stock: ${selProd.stock}`
+  document.getElementById('vform-fields').style.display='block'
+  document.getElementById('v-prix').value = selProd.prixVente
+  document.getElementById('v-qty').value = 1
+  calcTotal()
+  setVerr('')
+}
+
+function clearSel(){
+  selProd=null
+  document.getElementById('sel-info').style.display='none'
+  document.getElementById('vform-fields').style.display='none'
+  document.getElementById('v-total').style.display='none'
+  document.getElementById('prod-search').value=''
+}
+
+function clearSearch(){
+  document.getElementById('prod-search').value=''
+  document.getElementById('clear-search').style.display='none'
+  document.getElementById('dd-prod').classList.remove('show')
+}
+
+function calcTotal(){
+  if(!selProd) return
+  const q = parseFloat(document.getElementById('v-qty').value)||0
+  const p = parseFloat(document.getElementById('v-prix').value)||0
+  const t = q*p, b = (p - selProd.prixAchat)*q
+  const tv = document.getElementById('v-total')
+  if(t>0){ tv.style.display='block'; document.getElementById('v-total-val').textContent=fcfa(t); document.getElementById('v-ben-val').textContent='+'+fcfa(b) }
+  else tv.style.display='none'
+}
+
+function setVerr(msg){
+  const el = document.getElementById('v-err')
+  if(msg){ el.textContent=msg; el.style.display='block' } else el.style.display='none'
+}
+
+function submitVente(){
+  if(!selProd) return setVerr('Veuillez sélectionner un parfum')
+  const q = parseInt(document.getElementById('v-qty').value)||0
+  const p = parseFloat(document.getElementById('v-prix').value)||0
+  if(q<1) return setVerr('La quantité doit être au moins 1')
+  if(p<=0) return setVerr('Le prix de vente est obligatoire')
+  if(q>selProd.stock) return setVerr(`Stock insuffisant ! Il reste ${selProd.stock} unité(s)`)
+
+  const v = {
+    id:'v'+Date.now(), produitId:selProd.id, nomProduit:selProd.nom, marque:selProd.marque,
+    quantite:q, prixUnitaire:p, total:p*q, prixAchat:selProd.prixAchat,
+    benefice:(p-selProd.prixAchat)*q, paiement:document.getElementById('v-paie').value,
+    client:document.getElementById('v-client').value.trim(),
+    note:document.getElementById('v-note').value.trim(),
+    date:new Date().toISOString(), annulee:false
+  }
+  ventes.unshift(v); save(KEYS.V, ventes)
+
+  // MAJ stock
+  selProd.stock -= q
+  const idx = produits.findIndex(p=>p.id===selProd.id)
+  produits[idx].stock = selProd.stock
+  save(KEYS.P, produits)
+
+  clearSel()
+  document.getElementById('v-client').value=''
+  document.getElementById('v-note').value=''
+  setVerr('')
+  toast('✓ Vente enregistrée !')
+
+  if(selProd.stock <= selProd.stockAlerte)
+    setTimeout(()=>toast(`⚠ Stock bas : ${selProd.nom} (${selProd.stock} restant${selProd.stock>1?'s':''})`), 3000)
+
+  renderVHist()
+}
+
+function renderVHist(){
+  const td = today()
+  const vj = ventes.filter(v=>v.date.startsWith(td))
+  const actives = vj.filter(v=>!v.annulee)
+  document.getElementById('vcnt').textContent = actives.length
+
+  const el = document.getElementById('vhist-list')
+  if(!vj.length){ el.innerHTML='<div class="card" style="text-align:center;padding:32px"><p class="muted">Aucune vente aujourd\'hui</p></div>'; return }
+  el.innerHTML = vj.map(v=>`
+    <div class="vcard" style="${v.annulee?'opacity:.5':''}">
+      <div class="flex aic jb">
+        <div style="min-width:0;flex:1">
+          <div class="flex aic gap2"><span class="bold sm trunc">${v.nomProduit}</span>
+            ${v.annulee?'<span class="badge br">Annulée</span>':''}
+          </div>
+          <div class="sm muted">Qté: ${v.quantite} · ${v.paiement}${v.client?' · '+v.client:''}</div>
+          <div class="sm muted">${fdatetime(v.date)}</div>
+        </div>
+        <div style="text-align:right;margin-left:10px">
+          <div class="gold bold">${fcfa(v.total)}</div>
+          <div class="grn" style="font-size:12px">+${fcfa(v.benefice)}</div>
+          ${!v.annulee?`<button class="btn btn-red btn-sm" style="margin-top:5px;font-size:11px" onclick="annulerVente('${v.id}')">Annuler</button>`:''}
+        </div>
+      </div>
+    </div>`).join('')
+
+  if(actives.length){
+    el.innerHTML += `<div class="card" style="border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.05);margin-top:6px">
+      <div class="flex aic jb">
+        <span class="bold sm">Total du jour</span>
+        <span class="gold bold" style="font-size:17px">${fcfa(actives.reduce((s,v)=>s+v.total,0))}</span>
+      </div></div>`
+  }
+}
+
+function annulerVente(id){
+  if(!confirm('Annuler cette vente ? Le stock sera remis à jour.')) return
+  const v = ventes.find(x=>x.id===id)
+  if(!v||v.annulee) return
+  v.annulee=true; save(KEYS.V, ventes)
+  const p = produits.find(x=>x.id===v.produitId)
+  if(p){ p.stock+=v.quantite; save(KEYS.P, produits) }
+  renderVHist(); toast('Vente annulée')
+}
+
+// ─────────────────────────────────────────────
+// STOCK / CATALOGUE
+// ─────────────────────────────────────────────
+function setGenreFilter(g, el){
+  genreFilter=g
+  document.querySelectorAll('#genre-chips .chip').forEach(c=>c.classList.remove('on'))
+  el.classList.add('on')
+  renderStock()
+}
+
+function renderStock(){
+  const q = document.getElementById('stock-search').value.toLowerCase()
+  const list = produits.filter(p=>{
+    const mg = genreFilter==='Tous'||p.genre===genreFilter
+    const mq = !q||p.nom.toLowerCase().includes(q)||p.marque.toLowerCase().includes(q)
+    return mg&&mq
+  })
+  document.getElementById('stock-count').textContent = list.length+' produit'+(list.length>1?'s':'')
+  const el = document.getElementById('stock-list')
+  if(!list.length){ el.innerHTML='<div class="card" style="text-align:center;padding:32px"><p class="muted">Aucun produit</p></div>'; return }
+  el.innerHTML = list.map(p=>{
+    const stockCls = p.stock===0?'br':p.stock<=p.stockAlerte?'bo':'bg'
+    const stockLbl = p.stock===0?'Rupture':p.stock+'</span> en stock'
+    return `<div class="pcard">
+      <div class="flex gap3">
+        <div class="pthumb">${p.photo?`<img src="${p.photo}" alt="${p.nom}"/>`:'🧴'}</div>
+        <div style="flex:1;min-width:0">
+          <div class="flex aic jb">
+            <div>
+              <div class="bold sm trunc" style="max-width:180px">${p.nom}</div>
+              <div class="sm muted">${p.marque} · ${p.contenance} · ${p.genre}</div>
+            </div>
+            <span class="badge ${stockCls}">${p.stock===0?'Rupture':p.stock+' restant'+(p.stock>1?'s':'')}</span>
+          </div>
+          <div class="flex aic jb mt1">
+            <div>
+              <div class="sm muted">Achat: <span style="color:var(--txt)">${fcfa(p.prixAchat)}</span></div>
+              <div class="sm muted">Vente: <span class="gold bold">${fcfa(p.prixVente)}</span></div>
+            </div>
+            <div style="text-align:right">
+              <div class="sm muted">Bénéfice unit.</div>
+              <div class="grn bold sm">+${fcfa(p.prixVente-p.prixAchat)}</div>
+            </div>
+          </div>
+          ${p.notes?`<div class="sm muted" style="font-style:italic;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.notes}</div>`:''}
+          <div class="flex gap2" style="margin-top:10px">
+            <button class="btn btn-ghost btn-sm flex-1" style="justify-content:center;font-size:12px" onclick="openReappro('${p.id}')">
+              <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              Réappro
+            </button>
+            <button class="btn btn-blue btn-sm flex-1" style="justify-content:center;font-size:12px" onclick="openEditProd('${p.id}')">
+              <svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Modifier
+            </button>
+            <button class="btn btn-red btn-sm" onclick="deleteProd('${p.id}')">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function deleteProd(id){
+  const p = produits.find(x=>x.id===id)
+  if(!confirm(`Supprimer "${p.nom}" ? Action irréversible.`)) return
+  produits = produits.filter(x=>x.id!==id); save(KEYS.P, produits)
+  renderStock(); toast('Produit supprimé')
+}
+
+// ─────────────────────────────────────────────
+// MODAL PRODUIT
+// ─────────────────────────────────────────────
+let editId = null
+
+function openAddProd(){ editId=null; openProdModal(null) }
+function openEditProd(id){ editId=id; openProdModal(produits.find(p=>p.id===id)) }
+
+function openProdModal(p){
+  document.getElementById('modal-title').textContent = p?'Modifier le parfum':'Ajouter un parfum'
+  const g = p?.genre||'Homme'
+  document.getElementById('modal-body').innerHTML = `
+    <div class="frow"><label class="lbl">Nom du parfum *</label>
+      <input id="m-nom" value="${p?.nom||''}" placeholder="Ex: Dior Sauvage"/></div>
+    <div class="fgrid2">
+      <div><label class="lbl">Marque *</label><input id="m-marque" value="${p?.marque||''}" placeholder="Ex: Dior"/></div>
+      <div><label class="lbl">Contenance</label><input id="m-cont" value="${p?.contenance||''}" placeholder="100ml"/></div>
+    </div>
+    <div class="frow"><label class="lbl">Genre</label>
+      <div class="genre-btns">
+        <button class="genre-btn ${g==='Homme'?'on':''}" onclick="setG(this,'Homme')">Homme</button>
+        <button class="genre-btn ${g==='Femme'?'on':''}" onclick="setG(this,'Femme')">Femme</button>
+        <button class="genre-btn ${g==='Mixte'?'on':''}" onclick="setG(this,'Mixte')">Mixte</button>
+      </div>
+    </div>
+    <div class="fgrid2">
+      <div><label class="lbl">Prix achat (FCFA) *</label><input type="number" id="m-pa" value="${p?.prixAchat||''}" oninput="calcBen()"/></div>
+      <div><label class="lbl">Prix vente (FCFA) *</label><input type="number" id="m-pv" value="${p?.prixVente||''}" oninput="calcBen()"/></div>
+    </div>
+    <div id="m-ben" style="display:none;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);border-radius:10px;padding:9px;margin-bottom:12px;font-size:13px">
+      Bénéfice unitaire : <span class="grn bold" id="m-ben-val"></span>
+    </div>
+    <div class="fgrid2">
+      <div><label class="lbl">Stock actuel *</label><input type="number" id="m-stock" value="${p?.stock??''}" min="0"/></div>
+      <div><label class="lbl">Seuil alerte</label><input type="number" id="m-alerte" value="${p?.stockAlerte??2}" min="0"/></div>
+    </div>
+    <div class="frow"><label class="lbl">Notes (optionnel)</label>
+      <textarea id="m-notes" rows="2" placeholder="Ex: Original Dubai, contrefaçon...">${p?.notes||''}</textarea></div>
+    <div class="frow"><label class="lbl">Photo (optionnel)</label>
+      <label style="display:flex;align-items:center;gap:10px;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:11px 13px;cursor:pointer">
+        <svg viewBox="0 0 24 24" style="width:17px;height:17px;fill:none;stroke:var(--muted);stroke-width:2;stroke-linecap:round;flex-shrink:0"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span class="muted sm" id="photo-lbl">${p?.photo?'Photo sélectionnée ✓':'Choisir une photo'}</span>
+        <input type="file" accept="image/*" style="display:none" onchange="handlePhoto(event)"/>
+      </label>
+      ${p?.photo?`<img id="m-photo-preview" src="${p.photo}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;margin-top:8px"/>`:'<span id="m-photo-preview"></span>'}
+    </div>
+    <div id="m-err" style="display:none" class="alert-banner sm" style="margin-bottom:10px"></div>
+    <div class="flex gap2 mt2">
+      <button class="btn btn-ghost flex-1" style="justify-content:center" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-gold flex-1" style="justify-content:center" onclick="saveProd()">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round"><polyline points="20 6 9 17 4 12"/></svg>
+        ${p?'Modifier':'Ajouter'}
+      </button>
+    </div>
+  `
+  document.getElementById('modal-bg').classList.add('show')
+  if(p) calcBen()
+  window._photoData = p?.photo||null
+}
+
+function setG(el, g){
+  document.querySelectorAll('.genre-btn').forEach(b=>b.classList.remove('on'))
+  el.classList.add('on')
+}
+function calcBen(){
+  const pa=parseFloat(document.getElementById('m-pa')?.value)||0
+  const pv=parseFloat(document.getElementById('m-pv')?.value)||0
+  const el=document.getElementById('m-ben')
+  if(pa>0&&pv>0){ el.style.display='block'; document.getElementById('m-ben-val').textContent=fcfa(pv-pa) }
+  else el.style.display='none'
+}
+function handlePhoto(e){
+  const f=e.target.files[0]; if(!f) return
+  if(f.size>600000){ alert('Photo trop volumineuse (max 600 Ko)'); return }
+  const r=new FileReader()
+  r.onload=ev=>{
+    window._photoData=ev.target.result
+    document.getElementById('photo-lbl').textContent='Photo sélectionnée ✓'
+    const pr=document.getElementById('m-photo-preview')
+    if(pr) pr.outerHTML=`<img id="m-photo-preview" src="${ev.target.result}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;margin-top:8px"/>`
+  }
+  r.readAsDataURL(f)
+}
+function saveProd(){
+  const nom=document.getElementById('m-nom').value.trim()
+  const marque=document.getElementById('m-marque').value.trim()
+  const pa=parseFloat(document.getElementById('m-pa').value)
+  const pv=parseFloat(document.getElementById('m-pv').value)
+  const stock=parseInt(document.getElementById('m-stock').value)
+  const err=document.getElementById('m-err')
+  const setE=m=>{ err.textContent=m; err.style.display='block' }
+  if(!nom) return setE('Le nom est obligatoire')
+  if(!marque) return setE('La marque est obligatoire')
+  if(!pa||pa<=0) return setE("Le prix d'achat est obligatoire")
+  if(!pv||pv<=0) return setE('Le prix de vente est obligatoire')
+  if(isNaN(stock)||stock<0) return setE('Le stock est obligatoire')
+  err.style.display='none'
+  const gBtn = document.querySelector('.genre-btn.on')
+  const data = {
+    nom, marque, contenance:document.getElementById('m-cont').value.trim(),
+    genre:gBtn?gBtn.textContent:'Homme', prixAchat:pa, prixVente:pv,
+    stock, stockAlerte:parseInt(document.getElementById('m-alerte').value)||2,
+    notes:document.getElementById('m-notes').value.trim(),
+    photo:window._photoData||null
+  }
+  if(editId){ const i=produits.findIndex(p=>p.id===editId); produits[i]={...produits[i],...data} }
+  else produits.push({...data, id:'p'+Date.now(), dateAjout:new Date().toISOString()})
+  save(KEYS.P, produits); closeModal(); renderStock()
+  toast(editId?'Produit modifié !':'Produit ajouté !')
+}
+
+// ─────────────────────────────────────────────
+// MODAL RÉAPPRO
+// ─────────────────────────────────────────────
+function openReappro(id){
+  const p = produits.find(x=>x.id===id)
+  document.getElementById('modal-title').textContent = 'Réapprovisionner'
+  document.getElementById('modal-body').innerHTML = `
+    <div class="card" style="background:var(--surf);margin-bottom:14px">
+      <div class="bold">${p.nom}</div>
+      <div class="sm muted">Stock actuel : <span class="bold" style="color:var(--txt)">${p.stock}</span></div>
+    </div>
+    <div class="frow"><label class="lbl">Quantité reçue *</label>
+      <input type="number" id="r-qty" min="1" placeholder="Ex: 10"/></div>
+    <div class="frow"><label class="lbl">Nouveau prix d'achat unitaire (FCFA)</label>
+      <input type="number" id="r-pa" value="${p.prixAchat}"/>
+      <div class="sm muted" style="margin-top:5px">Le prix de revient moyen sera recalculé automatiquement</div>
+    </div>
+    <div class="flex gap2 mt2">
+      <button class="btn btn-ghost flex-1" style="justify-content:center" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-gold flex-1" style="justify-content:center" onclick="saveReappro('${id}')">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Valider
+      </button>
+    </div>`
+  document.getElementById('modal-bg').classList.add('show')
+}
+
+function saveReappro(id){
+  const qty=parseInt(document.getElementById('r-qty').value)||0
+  const pa=parseFloat(document.getElementById('r-pa').value)||0
+  if(qty<1) return alert('La quantité doit être au moins 1')
+  const p=produits.find(x=>x.id===id)
+  // Prix moyen pondéré
+  const newStock=p.stock+qty
+  const newPA=Math.round((p.stock*p.prixAchat+qty*pa)/newStock)
+  p.stock=newStock; p.prixAchat=newPA
+  reappros.unshift({id:'r'+Date.now(),produitId:id,nomProduit:p.nom,quantite:qty,prixAchat:pa,date:new Date().toISOString()})
+  save(KEYS.P,produits); save(KEYS.R,reappros)
+  closeModal(); renderStock(); toast(`✓ ${qty} unités ajoutées à ${p.nom}`)
+}
+
+// ─────────────────────────────────────────────
+// MODAL HELPERS
+// ─────────────────────────────────────────────
+function closeModal(){ document.getElementById('modal-bg').classList.remove('show') }
+function closeModalBg(e){ if(e.target===document.getElementById('modal-bg')) closeModal() }
+
+// ─────────────────────────────────────────────
+// RAPPORTS — HISTORIQUE
+// ─────────────────────────────────────────────
+let rtabActif='hist'
+function switchRTab(t){
+  rtabActif=t
+  document.getElementById('rtab-hist').style.display=t==='hist'?'block':'none'
+  document.getElementById('rtab-mois').style.display=t==='mois'?'block':'none'
+  document.getElementById('tbr1').className='tab-btn '+(t==='hist'?'on':'off')
+  document.getElementById('tbr2').className='tab-btn '+(t==='mois'?'on':'off')
+  if(t==='mois') renderMois()
+}
+
+function setPayFilter(p,el){
+  payFilter=p
+  document.querySelectorAll('#paie-chips .chip').forEach(c=>c.classList.remove('on'))
+  el.classList.add('on'); renderHist()
+}
+
+function getFiltered(){
+  const q=(document.getElementById('r-search')?.value||'').toLowerCase()
+  const deb=document.getElementById('r-deb')?.value||''
+  const fin=document.getElementById('r-fin')?.value||''
+  return ventes.filter(v=>{
+    if(v.annulee) return false
+    if(payFilter!=='Tous'&&v.paiement!==payFilter) return false
+    if(q&&!v.nomProduit.toLowerCase().includes(q)) return false
+    if(deb&&v.date<deb) return false
+    if(fin&&v.date>fin+'T23:59:59') return false
+    return true
+  })
+}
+
+function renderHist(){
+  const list=getFiltered()
+  const ca=list.reduce((s,v)=>s+v.total,0)
+  const ben=list.reduce((s,v)=>s+v.benefice,0)
+  document.getElementById('hist-totals').innerHTML=`
+    <div><div class="tv">${list.length}</div><div class="tl">Ventes</div></div>
+    <div><div class="tv gold">${fcfa(ca)}</div><div class="tl">CA</div></div>
+    <div><div class="tv grn">${fcfa(ben)}</div><div class="tl">Bénéfice</div></div>`
+  const el=document.getElementById('hist-list')
+  if(!list.length){ el.innerHTML='<div class="card" style="text-align:center;padding:28px"><p class="muted">Aucune vente pour ces filtres</p></div>'; return }
+  el.innerHTML=list.map(v=>`
+    <div class="vcard">
+      <div class="flex aic jb">
+        <div style="min-width:0;flex:1">
+          <div class="bold sm">${v.nomProduit}</div>
+          <div class="sm muted">Qté: ${v.quantite} · ${v.paiement}${v.client?' · '+v.client:''}</div>
+          <div class="sm muted">${fdatetime(v.date)}</div>
+          ${v.note?`<div class="sm muted" style="font-style:italic">${v.note}</div>`:''}
+        </div>
+        <div style="text-align:right;margin-left:10px">
+          <div class="gold bold">${fcfa(v.total)}</div>
+          <div class="grn" style="font-size:12px">+${fcfa(v.benefice)}</div>
+        </div>
+      </div>
+    </div>`).join('')
+}
+
+// ─────────────────────────────────────────────
+// RAPPORTS — MENSUEL
+// ─────────────────────────────────────────────
+function initMoisSelect(){
+  const mois=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']
+  const sm=document.getElementById('r-mois')
+  sm.innerHTML=mois.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')
+  sm.value=new Date().getMonth()+1
+  const sa=document.getElementById('r-annee')
+  const y=new Date().getFullYear()
+  sa.innerHTML=[y-1,y,y+1].map(a=>`<option value="${a}">${a}</option>`).join('')
+  sa.value=y
+}
+
+function renderMois(){
+  const mois=parseInt(document.getElementById('r-mois').value)
+  const annee=parseInt(document.getElementById('r-annee').value)
+  const prefix=`${annee}-${String(mois).padStart(2,'0')}`
+  const vv=ventes.filter(v=>!v.annulee&&v.date.startsWith(prefix))
+  const ca=vv.reduce((s,v)=>s+v.total,0)
+  const ben=vv.reduce((s,v)=>s+v.benefice,0)
+  const topMap={}, paieMap={}
+  vv.forEach(v=>{
+    topMap[v.nomProduit]=(topMap[v.nomProduit]||0)+v.quantite
+    paieMap[v.paiement]=(paieMap[v.paiement]||0)+v.total
+  })
+  const top=Object.entries(topMap).sort((a,b)=>b[1]-a[1])[0]
+
+  const moisNom=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'][mois-1]
+  document.getElementById('mois-stats').innerHTML=`
+    <div class="sgrid" style="margin-bottom:10px">
+      <div class="scard" style="grid-column:1"><div class="sicon" style="background:rgba(212,175,55,.15);color:var(--gold)"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div><div class="slbl">CA ${moisNom}</div><div class="sval gold">${fcfa(ca)}</div></div></div>
+      <div class="scard"><div class="sicon" style="background:rgba(74,222,128,.15);color:var(--green)"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div><div class="slbl">Bénéfice</div><div class="sval grn">${fcfa(ben)}</div></div></div>
+      <div class="scard"><div class="sicon" style="background:rgba(96,165,250,.15);color:var(--blue)"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>
+        <div><div class="slbl">Nb ventes</div><div class="sval">${vv.length}</div></div></div>
+      <div class="scard"><div class="sicon" style="background:rgba(192,132,252,.15);color:#c084fc"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="slbl">Top produit</div><div class="sval trunc" style="max-width:110px">${top?top[0]:'—'}</div></div></div>
+    </div>`
+
+  const paieEl=document.getElementById('mois-paie')
+  const paieList=Object.entries(paieMap).sort((a,b)=>b[1]-a[1])
+  if(paieList.length){
+    paieEl.style.display='block'
+    const colors={'MTN Mobile Money':'#f59e0b','Orange Money':'#f97316','Espèces':'#4ade80','Autres':'#60a5fa'}
+    document.getElementById('mois-paie-list').innerHTML=paieList.map(([k,v])=>`
+      <div class="flex aic jb" style="margin-bottom:8px">
+        <div class="flex aic gap2">
+          <div style="width:10px;height:10px;border-radius:50%;background:${colors[k]||'#a78bfa'};flex-shrink:0"></div>
+          <span class="sm">${k}</span>
+        </div>
+        <span class="bold sm">${fcfa(v)}</span>
+      </div>`).join('')
+  } else paieEl.style.display='none'
+}
+
+function exportMois(){
+  const mois=parseInt(document.getElementById('r-mois').value)
+  const annee=parseInt(document.getElementById('r-annee').value)
+  const prefix=`${annee}-${String(mois).padStart(2,'0')}`
+  const vv=ventes.filter(v=>!v.annulee&&v.date.startsWith(prefix))
+  const moisNom=['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'][mois-1]
+  doExportCSV(vv, `ventes_${moisNom}_${annee}.csv`)
+}
+
+// ─────────────────────────────────────────────
+// EXPORT CSV & IMPRESSION
+// ─────────────────────────────────────────────
+function exportCSV(){ doExportCSV(getFiltered(), `ventes_export_${today()}.csv`) }
+
+function doExportCSV(data, filename){
+  if(!data.length) return alert('Aucune vente à exporter')
+  const hd=['Date','Produit','Marque','Quantite','Prix_unitaire','Total_FCFA','Benefice_FCFA','Paiement','Client','Note']
+  const rows=data.map(v=>[fdate(v.date),v.nomProduit,v.marque,v.quantite,v.prixUnitaire,v.total,v.benefice,v.paiement,v.client||'',v.note||''])
+  const csv='\uFEFF'+[hd,...rows].map(r=>r.map(c=>`"${c}"`).join(';')).join('\n')
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv)
+  a.download=filename; a.click(); toast('Fichier CSV exporté !')
+}
+
+function printDay(){
+  const td=today()
+  const vj=ventes.filter(v=>!v.annulee&&v.date.startsWith(td))
+  const ca=vj.reduce((s,v)=>s+v.total,0), ben=vj.reduce((s,v)=>s+v.benefice,0)
+  const rows=vj.map(v=>`<tr><td>${v.nomProduit}</td><td style="text-align:center">${v.quantite}</td>
+    <td style="text-align:right">${fcfa(v.prixUnitaire)}</td><td style="text-align:right">${fcfa(v.total)}</td>
+    <td>${v.paiement}</td><td>${v.client||'—'}</td></tr>`).join('')
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Rapport ${fdate(td)}</title>
+    <style>body{font-family:Arial,sans-serif;padding:20px;color:#333}h1{color:#d4af37}
+    table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#f5f5f5;padding:9px;text-align:left;border-bottom:2px solid #ddd}
+    td{padding:8px;border-bottom:1px solid #eee}tfoot td{font-weight:700;background:#fffbeb}</style></head>
+    <body><h1>ParfumPro — Rapport du ${fdate(td)}</h1>
+    <p>Ventes : <b>${vj.length}</b> &nbsp;|&nbsp; CA : <b>${fcfa(ca)}</b> &nbsp;|&nbsp; Bénéfice : <b>${fcfa(ben)}</b></p>
+    <table><thead><tr><th>Produit</th><th>Qté</th><th>Prix unit.</th><th>Total</th><th>Paiement</th><th>Client</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="3"><b>TOTAL</b></td><td><b>${fcfa(ca)}</b></td><td colspan="2"></td></tr></tfoot>
+    </table></body></html>`
+  const w=window.open('','_blank'); w.document.write(html); w.document.close(); w.print()
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+initData()
+produits = load(KEYS.P)
+ventes   = load(KEYS.V)
+reappros = load(KEYS.R)
+initMoisSelect()
+renderDash()
+renderStock()
+renderHist()
+</script>
+</body>
+</html>
